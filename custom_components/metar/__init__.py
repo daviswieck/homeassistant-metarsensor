@@ -1,17 +1,20 @@
-import logging
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryNotReady
+from .const import DOMAIN
 
-_LOGGER = logging.getLogger(__name__)
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up METAR from a config entry."""
+    try:
+        # Use async_create_task to avoid blocking during setup
+        hass.async_create_task(
+            hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+        )
+    except Exception as err:
+        raise ConfigEntryNotReady(f"Error setting up METAR: {err}") from err
 
-DOMAIN = "metar"
-
-async def async_setup_entry(hass, entry):
-    """Set up the METAR integration from a config entry."""
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "sensor")
-    )
     return True
 
-async def async_unload_entry(hass, entry):
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    await hass.config_entries.async_forward_entry_unload(entry, "sensor")
-    return True
+    return await hass.config_entries.async_unload_platforms(entry, ["sensor"])
