@@ -1,9 +1,10 @@
 {
   "domain": "metar",
-  "name": "Metar weather",
-  "version": "2021.07.1",
-  "documentation": "https://en.wikipedia.org/wiki/METAR",
+  "name": "METAR Sensor",
+  "version": "1.0",
+  "documentation": "https://www.home-assistant.io/integrations/sensor/",
   "dependencies": [],
-  "codeowners": ["lfasci"],
-  "requirements": ["metar"]
+  "codeowners": ["@daviswieck"],
+  "requirements": ["metar"],
+  "iot_class": "local_polling"
 }
